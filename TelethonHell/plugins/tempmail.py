@@ -11,11 +11,11 @@ async def demn(ult):
         try:
             response = conv.wait_event(events.NewMessage(
                 incoming=True,
-                from_users=6280280424
+                from_users=863661281
             ))
             await conv.send_message("/start")
             await asyncio.sleep(5)
-            await conv.send_message("📧 Generate Email")
+            await conv.send_message("➕ Generate New / Delete")
             response = await response
 
             # Check if the rows list has enough elements
@@ -31,9 +31,9 @@ async def demn(ult):
 
             await hellbot.send_read_acknowledge(chat)
         except YouBlockedUserError:
-            await msg.edit("Boss! Please Unblock @TempMailGenRoBot")
+            await msg.edit("Boss! Please Unblock @TempMail_org_bot")
             return
-        await eor(ult, f"TEMPMAIL ~ \n`{response.message.message}`\n\n[CLICK TO VIEW INBOX](TempMailGenRoBot.t.me)")
+        await eor(ult, f"TEMPMAIL ~ \n`{response.message.message}`\n\n[CLICK TO VIEW INBOX](TempMail_org_bot.t.me)")
 
 CmdHelp("tempmail").add_command(
     "tempmail", "Generate Temporary mail....!"
