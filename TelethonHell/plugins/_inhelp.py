@@ -270,33 +270,47 @@ if Config.BOT_USERNAME is not None and tgbot is not None:
             )
         await event.answer([result] if result else None)
 
-    @tgbot.on(callbackquery.CallbackQuery(data=compile(b"pmclick")))
-    async def on_pm_click(event):
-        auth = await clients_list()
-        if event.query.user_id in auth:
-            reply_pop_up_alert = "This is for Other Users..."
-        else:
-            reply_pop_up_alert = "🔰 This is WarUserBot PM Security to keep away unwanted retards from spamming PM !!"
-        await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+    @tgbot.on(events.CallbackQuery(data=b"pmclick"))
+async def on_pm_click(event):
+    auth = await clients_list()
+    if event.query.user_id in auth:
+        reply_pop_up_alert = "This is for Other Users..."
+    else:
+        reply_pop_up_alert = "🔰 This is WarUserBot PM Security to keep away unwanted retards from spamming PM !!"
+    await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
 
-    @tgbot.on(callbackquery.CallbackQuery(data=compile(b"req")))
-    async def on_pm_click(event):
-        auth = await clients_list()
-        if event.query.user_id in auth:
-            reply_pop_up_alert = "This is for other users!"
-            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-        else:
-            await event.edit(
-                "✅ **Request Registered** \n\nMy master will now decide to look for your request or not.\n😐 Till then wait patiently and don't spam!!"
-            )
-            target = await event.client(GetFullUserRequest(event.query.user_id))
-            first_name = html.escape(target.user.first_name)
-            if first_name is not None:
-                first_name = first_name.replace("\u2060", "")
-            await tbot.send_message(
-                LOG_GP,
-                f"#PM_REQUEST \n\n⚜️ You got a PM request from [{first_name}](tg://user?id={event.query.user_id}) !",
-            )
+@tgbot.on(events.CallbackQuery(data=b"req"))
+async def on_request_approval(event):
+    auth = await clients_list()
+    if event.query.user_id in auth:
+        reply_pop_up_alert = "This is for other users!"
+        await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+    else:
+        await event.edit(
+            "✅ **Request Registered** \n\nMy master will now decide to look for your request or not.\n😐 Till then wait patiently and don't spam!!"
+        )
+        target = await event.client(functions.users.GetFullUserRequest(event.query.user_id))
+        first_name = target.user.first_name
+        await tbot.send_message(
+            LOG_GP,
+            f"#PM_REQUEST \n\n⚜️ You got a PM request from [{first_name}](tg://user?id={event.query.user_id}) !",
+        )
+
+@tgbot.on(events.CallbackQuery(data=b"heheboi"))
+async def on_block_user(event):
+    auth = await clients_list()
+    if event.query.user_id in auth:
+        reply_pop_up_alert = "This is for other users!"
+        await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+    else:
+        await event.edit(f"As you wish. **BLOCKED !!**")
+        await event.client(functions.contacts.BlockRequest(event.query.user_id))
+        target = await event.client(functions.users.GetFullUserRequest(event.query.user_id))
+        first_name = target.user.first_name
+        await tbot.send_message(
+            LOG_GP,
+            f"#BLOCK \n\n**Blocked** [{first_name}](tg://user?id={event.query.user_id}) \nReason:- PM Self Block",
+        )
 
     @tgbot.on(callbackquery.CallbackQuery(data=compile(b"heheboi")))
     async def on_pm_click(event):
