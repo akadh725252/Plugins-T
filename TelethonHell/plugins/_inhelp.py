@@ -37,6 +37,7 @@ alive_txt = """\
 👑 <b>Sudo Access:</b>  <code>{}</code>
 """
 
+
 @tgbot.on(events.NewMessage(pattern='/start'))
 async def start(event):
     img_path = 'https://graph.org/file/c83443bf2a2eff3fdadb1.jpg'
@@ -45,13 +46,26 @@ async def start(event):
     url_button2 = Button.url("Support", "https://t.me/+a7Jui-Qd3vtkYTVl")
     url_button3 = Button.url("Update", "https://t.me/waruserbot")
 
+    message = (
+        "Welcome to WarUserBot!\n\n"
+        "This userbot is known for its smoothness, design, and support. "
+        "Feel free to explore and use the features. "
+        "Here are some useful links:\n"
+        "📑 [Repo](https://github.com/MeAbhish3k/waruserbot)\n"
+        "🌐 [Support](https://t.me/+a7Jui-Qd3vtkYTVl)\n"
+        "🔄 [Update](https://t.me/waruserbot)"
+    )
+
     await event.respond(
+        message,
         file=img_path,
         buttons=[
             [url_button1],
             [url_button2, url_button3]
-        ]
+        ],
+        link_preview=False 
     )
+
 
 @tgbot.on(events.NewMessage(pattern='/repo'))
 async def repo(event):
