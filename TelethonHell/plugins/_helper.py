@@ -2,18 +2,22 @@ from telethon.errors import ChatSendInlineForbiddenError as noin
 from telethon.errors.rpcerrorlist import BotInlineDisabledError as noinline
 from telethon.errors.rpcerrorlist import BotMethodInvalidError as dedbot
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-
+from telethon import TelegramClient as client, events
 from . import *
 
 msg = f"""
-**⚡WARUSERBOT⚡**
-  •        [📑 Repo 📑](https://github.com/MeAbhish3k/WARUSERBOT)
-  •        [WarBot Network](https://t.me/wrrlegend)
+**𝙒𝙖𝙧𝙐𝙨𝙚𝙧𝘽𝙤𝙩 🇮🇳**
+  •        [𝙍𝙚𝙥𝙤 📑](https://github.com/MeAbhish3k/WARUSERBOT)
+  •        [𝙒𝙖𝙧𝙐𝙨𝙚𝙧𝘽𝙤𝙩 🇮🇳](https://t.me/waruserbot)
   •  ©️ {hell_channel} ™
 """
 botname = Config.BOT_USERNAME
 
-
+@client.on(events.NewMessage(pattern='/repo'))
+async def repo(event):
+    repo_info = f"**Repository Info:**\n[📑 𝙍𝙚𝙥𝙤](https://github.com/MeAbhish3k/WARUSERBOT)\n©️ {YOUR_COPYRIGHT_SYMBOL} ™"
+    await event.reply(repo_info, parse_mode='markdown')
+  
 @hell_cmd(pattern="repo$")
 async def repo(event):
     cids = await client_id(event)
@@ -104,4 +108,3 @@ async def cmdinfo(event):
     except KeyError:
         return await parse_error(event, f"__• No command named:__ `{cmd}`", False)
     await eor(event, f"**• File:** \n» __{file}__ \n\n**• {cmd}:** \n» __{info}__ \n\n**• Example:** \n» `{str(exam)}`")
-
