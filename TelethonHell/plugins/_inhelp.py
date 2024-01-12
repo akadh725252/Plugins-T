@@ -52,7 +52,11 @@ async def start(event):
         ]
     )
 
-
+@tgbot.on(events.NewMessage(pattern='/repo'))
+async def repo(event):
+    repo_info = f"**Repository Info:**\n[📑 𝙍𝙚𝙥𝙤](https://github.com/MeAbhish3k/WARUSERBOT)\n©️ @waruserbot ™"
+    await event.reply(repo_info, parse_mode='markdown')
+    
 def button(page, modules):
     Row = hell_row
 
