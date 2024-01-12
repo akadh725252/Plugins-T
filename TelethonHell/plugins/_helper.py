@@ -2,7 +2,6 @@ from telethon.errors import ChatSendInlineForbiddenError as noin
 from telethon.errors.rpcerrorlist import BotInlineDisabledError as noinline
 from telethon.errors.rpcerrorlist import BotMethodInvalidError as dedbot
 from telethon.errors.rpcerrorlist import YouBlockedUserError
-from telethon import TelegramClient as client
 from . import *
 
 msg = f"""
@@ -13,10 +12,6 @@ msg = f"""
 """
 botname = Config.BOT_USERNAME
 
-@client.on(events.NewMessage(pattern='/repo'))
-async def repo(event):
-    repo_info = f"**Repository Info:**\n[📑 𝙍𝙚𝙥𝙤](https://github.com/MeAbhish3k/WARUSERBOT)\n©️ @waruserbot ™"
-    await event.reply(repo_info, parse_mode='markdown')
   
 @hell_cmd(pattern="repo$")
 async def repo(event):
