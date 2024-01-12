@@ -292,8 +292,13 @@ async def on_request_approval(event):
         target = await event.client(functions.users.GetFullUserRequest(event.query.user_id))
         first_name = target.user.first_name
         chat_entity = await event.client.get_entity(event.chat_id)
-        await event.client.edit_message(chat_entity, event.id, f"#PM_REQUEST \n\n⚜️ You got a PM request from [{first_name}](tg://user?id={event.query.user_id}) !")
 
+        if chat_entity is not None:  # Check if the chat entity is not None
+            await event.client.edit_message(chat_entity, event.id, f"#PM_REQUEST \n\n⚜️ You got a PM request from [{first_name}](tg://user?id={event.query.user_id}) !")
+        else:
+            # Log an error or handle the case where chat_entity is None
+            print("Error: Chat entity is None")
+            
 @tgbot.on(events.CallbackQuery(data=b"heheboi"))
 async def on_block_user(event):
     auth = await clients_list()
