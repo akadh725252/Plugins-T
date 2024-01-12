@@ -55,7 +55,7 @@ async def start(event):
 
 @tgbot.on(events.NewMessage(pattern='/repo'))
 async def repo(event):
-    repo_url = "https://api.github.com/repos/MeAbhish3k/WARUSERBOT"
+    repo_url = "https://api.github.com/repos/MeAbhish3k/waruserbot"
     
     async with httpx.AsyncClient() as client:
         response = await client.get(repo_url)
@@ -64,7 +64,7 @@ async def repo(event):
             repo_data = response.json()
             repo_info = (
                 f"**Repository Info:**\n"
-                f"[📑 𝙍𝙚𝙥𝙤](https://github.com/MeAbhish3k/WARUSERBOT)\n"
+                f"[📑 𝙍𝙚𝙥𝙤](https://github.com/MeAbhish3k/waruserbot)\n"
                 f"🌟 Stars: {repo_data['stargazers_count']}\n"
                 f"🍴 Forks: {repo_data['forks_count']}\n"
                 f"🔄 Last Update: {repo_data['updated_at']}\n"
