@@ -35,7 +35,7 @@ alive_txt = """{}\n
 <b>Sudo ≈</b>  <i>{}</i>
 """
 
-@client.on(events.NewMessage(pattern='/start'))
+@tgbot.on(events.NewMessage(pattern='/start'))
 async def start(event):
     img_path = 'https://graph.org/file/c83443bf2a2eff3fdadb1.jpg'
 
