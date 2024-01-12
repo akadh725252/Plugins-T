@@ -2,6 +2,7 @@ import html
 import random
 from math import ceil
 from re import compile
+import httpx
 
 from telethon import Button, custom, functions
 from telethon.events import InlineQuery, callbackquery
@@ -54,9 +55,25 @@ async def start(event):
 
 @tgbot.on(events.NewMessage(pattern='/repo'))
 async def repo(event):
-    repo_info = f"**Repository Info:**\n[📑 𝙍𝙚𝙥𝙤](https://github.com/MeAbhish3k/WARUSERBOT)\n©️ @waruserbot ™"
-    await event.reply(repo_info, parse_mode='markdown')
+    repo_url = "https://api.github.com/repos/MeAbhish3k/WARUSERBOT"
     
+    async with httpx.AsyncClient() as client:
+        response = await client.get(repo_url)
+
+        if response.status_code == 200:
+            repo_data = response.json()
+            repo_info = (
+                f"**Repository Info:**\n"
+                f"[📑 𝙍𝙚𝙥𝙤](https://github.com/MeAbhish3k/WARUSERBOT)\n"
+                f"🌟 Stars: {repo_data['stargazers_count']}\n"
+                f"🍴 Forks: {repo_data['forks_count']}\n"
+                f"🔄 Last Update: {repo_data['updated_at']}\n"
+                f"©️ @waruserbot ™"
+            )
+            await event.reply(repo_info, parse_mode='markdown')
+        else:
+            await event.reply("Failed to retrieve repository information.")
+
 def button(page, modules):
     Row = hell_row
 
