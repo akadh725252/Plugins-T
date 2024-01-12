@@ -35,6 +35,29 @@ alive_txt = """{}\n
 <b>Sudo ≈</b>  <i>{}</i>
 """
 
+@tgbot.on(events.NewMessage(pattern='/start'))
+async def start(event):
+    # Replace 'path_to_start_image.jpg' with the actual path to your start image
+    img_path = 'https://graph.org/file/c83443bf2a2eff3fdadb1.jpg'
+
+    # Send the start image with a single button
+    await event.respond(
+        file=img_path,
+        buttons=[
+            [Button.inline("Special Button", b"special_btn")]
+        ]
+    )
+
+
+@tgbot.on(events.CallbackQuery())
+async def handle_callback(event):
+    if event.data == b'special_btn':
+        # Check if the user is the owner before responding to the button click
+        if str(event.sender_id) == owner_id:
+            await event.answer("You are the owner and pressed the special button!")
+        else:
+            await event.answer("You are not my owner!")
+
 
 def button(page, modules):
     Row = hell_row
