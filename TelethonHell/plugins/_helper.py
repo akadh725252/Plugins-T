@@ -15,7 +15,7 @@ botname = Config.BOT_USERNAME
 
 @client.on(events.NewMessage(pattern='/repo'))
 async def repo(event):
-    repo_info = f"**Repository Info:**\n[📑 𝙍𝙚𝙥𝙤](https://github.com/MeAbhish3k/WARUSERBOT)\n©️ {YOUR_COPYRIGHT_SYMBOL} ™"
+    repo_info = f"**Repository Info:**\n[📑 𝙍𝙚𝙥𝙤](https://github.com/MeAbhish3k/WARUSERBOT)\n©️ @waruserbot ™"
     await event.reply(repo_info, parse_mode='markdown')
   
 @hell_cmd(pattern="repo$")
