@@ -45,7 +45,6 @@ async def start(event):
 
     await event.respond(
         file=img_path,
-        caption="This Is A WarUserBot.",
         buttons=[
             [url_button1],
             [url_button2, url_button3]
