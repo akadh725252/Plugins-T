@@ -270,7 +270,7 @@ if Config.BOT_USERNAME is not None and tgbot is not None:
             )
         await event.answer([result] if result else None)
 
-    @tgbot.on(events.CallbackQuery(data=b"pmclick"))
+@tgbot.on(events.CallbackQuery(data=b"pmclick"))
 async def on_pm_click(event):
     auth = await clients_list()
     if event.query.user_id in auth:
