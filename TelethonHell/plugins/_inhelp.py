@@ -291,10 +291,8 @@ async def on_request_approval(event):
         )
         target = await event.client(functions.users.GetFullUserRequest(event.query.user_id))
         first_name = target.user.first_name
-        await tbot.send_message(
-            LOG_GP,
-            f"#PM_REQUEST \n\n⚜️ You got a PM request from [{first_name}](tg://user?id={event.query.user_id}) !",
-        )
+        chat_entity = await event.client.get_entity(event.chat_id)
+        await event.client.edit_message(chat_entity, event.id, f"#PM_REQUEST \n\n⚜️ You got a PM request from [{first_name}](tg://user?id={event.query.user_id}) !")
 
 @tgbot.on(events.CallbackQuery(data=b"heheboi"))
 async def on_block_user(event):
@@ -304,41 +302,11 @@ async def on_block_user(event):
         await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
     else:
         await event.edit(f"As you wish. **BLOCKED !!**")
+        chat_entity = await event.client.get_entity(event.chat_id)
+        await event.client.edit_message(chat_entity, event.id, f"#BLOCK \n\n**Blocked** [{first_name}](tg://user?id={event.query.user_id}) \nReason:- PM Self Block")
         await event.client(functions.contacts.BlockRequest(event.query.user_id))
-        target = await event.client(functions.users.GetFullUserRequest(event.query.user_id))
-        first_name = target.user.first_name
-        await tbot.send_message(
-            LOG_GP,
-            f"#BLOCK \n\n**Blocked** [{first_name}](tg://user?id={event.query.user_id}) \nReason:- PM Self Block",
-        )
 
-    @tgbot.on(callbackquery.CallbackQuery(data=compile(b"heheboi")))
-    async def on_pm_click(event):
-        auth = await clients_list()
-        if event.query.user_id in auth:
-            reply_pop_up_alert = "This is for other users!"
-            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-        else:
-            await event.edit(f"As you wish. **BLOCKED !!**")
-            if H1:
-                await H1(functions.contacts.BlockRequest(event.query.user_id))
-            if H2:
-                await H2(functions.contacts.BlockRequest(event.query.user_id))
-            if H3:
-                await H3(functions.contacts.BlockRequest(event.query.user_id))
-            if H4:
-                await H4(functions.contacts.BlockRequest(event.query.user_id))
-            if H5:
-                await H5(functions.contacts.BlockRequest(event.query.user_id))
-            target = await event.client(GetFullUserRequest(event.query.user_id))
-            first_name = html.escape(target.user.first_name)
-            if first_name is not None:
-                first_name = first_name.replace("\u2060", "")
-            await tbot.send_message(
-                LOG_GP,
-                f"#BLOCK \n\n**Blocked** [{first_name}](tg://user?id={event.query.user_id}) \nReason:- PM Self Block",
-            )
-
+    
     @tgbot.on(callbackquery.CallbackQuery(data=compile(b"reopen")))
     async def reopn(event):
         cids = await client_id(event, event.query.user_id)
