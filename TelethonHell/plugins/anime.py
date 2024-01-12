@@ -5,26 +5,33 @@ from . import *
 
 
 @hell_cmd(pattern="anime(?:\s|$)([\s\S]*)")
-async def _(event):
-    query = event.text[7:]
-    if query == "":
-        return await eor(event, "Please give anime name to search on Anilist.")
+async def search_anime(event):
+    query = event.text[7:].strip()
+    if not query:
+        return await eor(event, "Please provide the name of the anime to search on Anilist.")
+
     hell = await eor(event, f"__Searching for__ `{query}` __on Anilist.__")
     qdb = rand_key()
     ANIME_DB[qdb] = query
-    result = await get_anilist(qdb, 1)
-    if len(result) == 1:
-        return await hell.edit(result[0])
-    pic, msg = result[0], result[1][0]
+
     try:
+        result = await get_anilist(qdb, 1)
+        if len(result) == 1:
+            return await hell.edit(result[0])
+
+        pic, msg = result[0], result[1][0]
         await event.client.send_file(
             event.chat_id, file=pic, caption=msg, force_document=False
         )
         await hell.delete()
+
+        if os.path.exists(pic):
+            os.remove(pic)
+
     except ChatSendMediaForbiddenError:
         await hell.edit(msg)
-    if os.path.exists(pic):
-        os.remove(pic)
+    except Exception as e:
+        await eor(event, f"An error occurred: {str(e)}")
 
 
 @hell_cmd(pattern="manga(?:\s|$)([\s\S]*)")
