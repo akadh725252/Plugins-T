@@ -23,7 +23,9 @@ async def join_chat(event):
         await event.edit(f"Joining the chat with link: {args}...")
 
         try:
-            await event.client(functions.channels.JoinChannelRequest(args))
+            result = await event.client(functions.channels.JoinChannelRequest(args))
+            if not result.full:
+                return await event.edit("Cannot join private channels or channels you are banned from.")
         except Exception as e:
             return await event.edit(f"Error joining the chat: {str(e)}")
 
@@ -40,7 +42,9 @@ async def leave_chat(event):
         await event.edit(f"Leaving the chat with link: {args}...")
 
         try:
-            await event.client(functions.channels.LeaveChannelRequest(args))
+            result = await event.client(functions.channels.LeaveChannelRequest(args))
+            if not result.full:
+                return await event.edit("Cannot leave private channels.")
         except Exception as e:
             return await event.edit(f"Error leaving the chat: {str(e)}")
 
