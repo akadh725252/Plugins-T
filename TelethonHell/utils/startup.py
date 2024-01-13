@@ -11,11 +11,11 @@ from TelethonHell.version import __telever__
 
 # Creates the logger group on first deploy and adds the helper bot
 async def logger_id(client):
-    desc = "A Bot Logger Group For WARUSERBOT. DO NOT LEAVE THIS GROUP!!"
+    desc = "A Bᴏᴛ Lᴏɢɢᴇʀ Gʀᴏᴜᴘ Fᴏʀ 𝙒𝙖𝙧𝙐𝙨𝙚𝙧𝘽𝙤𝙩 🇮🇳. Dᴏ Nᴏᴛ Lᴇᴀᴠᴇ Tʜɪs Gʀᴏᴜᴘ!!""
     try:
         grp = await client(
             functions.channels.CreateChannelRequest(
-                title="Waruserbot Logger", about=desc, megagroup=True
+                title="𝙒𝙖𝙧𝙐𝙨𝙚𝙧𝘽𝙤𝙩 𝙇𝙤𝙜𝙜𝙚𝙧 🇮🇳", about=desc, megagroup=True
             )
         )
         grp_id = grp.chats[0].id
@@ -44,7 +44,7 @@ async def logger_id(client):
         )
         await client(
             functions.channels.EditAdminRequest(
-                grp_id, Config.BOT_USERNAME, new_rights, "Helper"
+                grp_id, Config.BOT_USERNAME, new_rights, "helper"
             )
         )
     except Exception as e:
@@ -75,23 +75,23 @@ async def logger_check(bot):
 
 # Sends the startup message to logger group
 async def start_msg(client, pic, version, total):
-    is_sudo = "True" if Config.SUDO_USERS else "False"
+    is_sudo = "true" if Config.SUDO_USERS else "false"
     text = f"""
 #START
 
-<b><i>Version :</b></i> <code>{version}</code>
-<b><i>Clients :</b></i> <code>{str(total)}</code>
-<b><i>Sudo :</b></i> <code>{is_sudo}</code>
-<b><i>Library :</b></i> <code>Telethon - {__telever__}</code>
+<b><i>Vᴇʀsɪᴏɴ :</b></i> <code>{version}</code>
+<b><i>Cʟɪᴇɴᴛs :</b></i> <code>{str(total)}</code>
+<b><i>Sᴜᴅᴏ :</b></i> <code>{is_sudo}</code>
+<b><i>Lɪʙʀᴀʀʏ :</b></i> <code>Tᴇʟᴇᴛʜᴏɴ - {__telever__}</code>
 
-<b><i>»» <u><a href='https://t.me/waruserbot'>The WarUserBot</a></u> ««</i></b>
+<b><i>»» <u><a href='https://t.me/waruserbot'>𝙒𝙖𝙧𝙐𝙨𝙚𝙧𝘽𝙤𝙩 🇮🇳</a></u> ««</i></b>
 """
     await client.send_file(
         Config.LOGGER_ID,
         pic,
         caption=text,
         parse_mode="HTML",
-        buttons=[[Button.url("WarBot Network", "https://t.me/wrrlegend")]],
+        buttons=[[Button.url("𝙒𝙖𝙧𝙐𝙨𝙚𝙧𝘽𝙤𝙩 🇮🇳", "https://t.me/waruserbot")]],
     )
 
 
@@ -103,6 +103,3 @@ async def join_it(client):
             await client(functions.messages.ImportChatInviteRequest("6nBWPUON43AwYTk1"))
         except BaseException:
             pass
-
-
-# hellbot
