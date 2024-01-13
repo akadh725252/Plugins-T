@@ -1,5 +1,5 @@
 from . import * 
-from telethon import Button
+from telethon import Button, events
 from telethon.tl import functions
 from telethon.tl.types import ChatAdminRights
 
@@ -15,25 +15,48 @@ async def leave_all_chats(event):
 
     await event.edit("Left all chats successfully!")
 
-@hell_cmd(pattern="join(?: (.+))?$")
+@hell_cmd(pattern="join(?:\s(.+))?$")
 async def join_chat(event):
     args = event.pattern_match.group(1)
-    
+
     if args:
-        try:
-            link, username = args.split(" ", 1)
-        except ValueError:
-            return await event.edit("Invalid syntax. Usage: `/join link username`")
-
-        await event.edit(f"Joining the chat with link: {link} and username: {username}...")
+        await event.edit(f"Joining the chat with link: {args}...")
 
         try:
-            await event.client(functions.channels.JoinChannelRequest(link))
+            await event.client(functions.channels.JoinChannelRequest(args))
         except Exception as e:
             return await event.edit(f"Error joining the chat: {str(e)}")
 
         await event.edit("Joined the chat successfully!")
 
     else:
-        await event.edit("Please provide a chat link and username. Example: `/join link username`")
-      
+        await event.edit("Please provide a chat link. Example: `.join link`")
+
+@hell_cmd(pattern="leave(?:\s(.+))?$")
+async def leave_chat(event):
+    args = event.pattern_match.group(1)
+
+    if args:
+        await event.edit(f"Leaving the chat with link: {args}...")
+
+        try:
+            await event.client(functions.channels.LeaveChannelRequest(args))
+        except Exception as e:
+            return await event.edit(f"Error leaving the chat: {str(e)}")
+
+        await event.edit("Left the chat successfully!")
+
+    else:
+        await event.edit("Please provide a chat link. Example: `.leave link`")
+
+CmdHelp("chat").add_command(
+    "join", "<link>", "Joins a chat using the provided link."
+).add_command(
+    "leaveall", None, "Leaves all chats."
+).add_command(
+    "leave", "<link>", "Leaves a chat using the provided link."
+).add_info(
+    "Commands for joining and leaving chats."
+).add_warning(
+    "⚠️ Use with caution."
+).add()
