@@ -2,7 +2,6 @@ import html
 import random
 from math import ceil
 from re import compile
-import httpx
 
 from telethon import Button, custom, functions
 from telethon.events import InlineQuery, callbackquery
@@ -27,16 +26,14 @@ else:
 
 LOG_GP = Config.LOGGER_ID
 
-alive_txt = """\
-🌟 <b>Bot Status</b> 🌟
-
-🤖 <b>Telethon Version:</b>  <code>{}</code>
-🤖 <b>Waruserbot Version:</b>  <code>{}</code>
-⏳ <b>Uptime:</b>  <code>{}</code>
-🚨 <b>Abuse Status:</b>  <code>{}</code>
-👑 <b>Sudo Access:</b>  <code>{}</code>
+alive_txt = """{}\n
+<b><i>🏅 𝙱𝚘𝚝 𝚂𝚝𝚊𝚝𝚞𝚜 🏅</b></i>
+<b>Telethon ≈</b>  <i>{}</i>
+<b>Waruserbot ≈</b>  <i>{}</i>
+<b>Uptime ≈</b>  <i>{}</i>
+<b>Abuse ≈</b>  <i>{}</i>
+<b>Sudo ≈</b>  <i>{}</i>
 """
-
 
 @tgbot.on(events.NewMessage(pattern='/start'))
 async def start(event):
@@ -51,9 +48,6 @@ async def start(event):
         "This userbot is known for its smoothness, design, and support. "
         "Feel free to explore and use the features. "
         "Here are some useful links:\n"
-        "📑 [Repo](https://github.com/MeAbhish3k/waruserbot)\n"
-        "🌐 [Support](https://t.me/+a7Jui-Qd3vtkYTVl)\n"
-        "🔄 [Update](https://t.me/waruserbot)"
     )
 
     await event.respond(
@@ -87,7 +81,7 @@ async def repo(event):
             await event.reply(repo_info, parse_mode='markdown')
         else:
             await event.reply("Failed to retrieve repository information.")
-
+    
 def button(page, modules):
     Row = hell_row
 
@@ -306,48 +300,61 @@ if Config.BOT_USERNAME is not None and tgbot is not None:
             )
         await event.answer([result] if result else None)
 
-@tgbot.on(events.CallbackQuery(data=b"pmclick"))
-async def on_pm_click(event):
-    auth = await clients_list()
-    if event.query.user_id in auth:
-        reply_pop_up_alert = "This is for Other Users..."
-    else:
-        reply_pop_up_alert = "🔰 This is WarUserBot PM Security to keep away unwanted retards from spamming PM !!"
-    await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-
-@tgbot.on(events.CallbackQuery(data=b"req"))
-async def on_request_approval(event):
-    auth = await clients_list()
-    if event.query.user_id in auth:
-        reply_pop_up_alert = "This is for other users!"
-        await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-    else:
-        await event.edit(
-            "✅ **Request Registered** \n\nMy master will now decide to look for your request or not.\n😐 Till then wait patiently and don't spam!!"
-        )
-        target = await event.client(functions.users.GetFullUserRequest(event.query.user_id))
-        first_name = target.user.first_name
-        chat_entity = await event.client.get_entity(event.chat_id)
-
-        if chat_entity is not None:  # Check if the chat entity is not None
-            await event.client.edit_message(chat_entity, event.id, f"#PM_REQUEST \n\n⚜️ You got a PM request from [{first_name}](tg://user?id={event.query.user_id}) !")
+    @tgbot.on(callbackquery.CallbackQuery(data=compile(b"pmclick")))
+    async def on_pm_click(event):
+        auth = await clients_list()
+        if event.query.user_id in auth:
+            reply_pop_up_alert = "This is for Other Users..."
         else:
-            # Log an error or handle the case where chat_entity is None
-            print("Error: Chat entity is None")
-            
-@tgbot.on(events.CallbackQuery(data=b"heheboi"))
-async def on_block_user(event):
-    auth = await clients_list()
-    if event.query.user_id in auth:
-        reply_pop_up_alert = "This is for other users!"
+            reply_pop_up_alert = "🔰 This is WarUserBot PM Security to keep away unwanted retards from spamming PM !!"
         await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
-    else:
-        await event.edit(f"As you wish. **BLOCKED !!**")
-        chat_entity = await event.client.get_entity(event.chat_id)
-        await event.client.edit_message(chat_entity, event.id, f"#BLOCK \n\n**Blocked** [{first_name}](tg://user?id={event.query.user_id}) \nReason:- PM Self Block")
-        await event.client(functions.contacts.BlockRequest(event.query.user_id))
 
-    
+    @tgbot.on(callbackquery.CallbackQuery(data=compile(b"req")))
+    async def on_pm_click(event):
+        auth = await clients_list()
+        if event.query.user_id in auth:
+            reply_pop_up_alert = "This is for other users!"
+            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+        else:
+            await event.edit(
+                "✅ **Request Registered** \n\nMy master will now decide to look for your request or not.\n😐 Till then wait patiently and don't spam!!"
+            )
+            target = await event.client(GetFullUserRequest(event.query.user_id))
+            first_name = html.escape(target.user.first_name)
+            if first_name is not None:
+                first_name = first_name.replace("\u2060", "")
+            await tbot.send_message(
+                LOG_GP,
+                f"#PM_REQUEST \n\n⚜️ You got a PM request from [{first_name}](tg://user?id={event.query.user_id}) !",
+            )
+
+    @tgbot.on(callbackquery.CallbackQuery(data=compile(b"heheboi")))
+    async def on_pm_click(event):
+        auth = await clients_list()
+        if event.query.user_id in auth:
+            reply_pop_up_alert = "This is for other users!"
+            await event.answer(reply_pop_up_alert, cache_time=0, alert=True)
+        else:
+            await event.edit(f"As you wish. **BLOCKED !!**")
+            if H1:
+                await H1(functions.contacts.BlockRequest(event.query.user_id))
+            if H2:
+                await H2(functions.contacts.BlockRequest(event.query.user_id))
+            if H3:
+                await H3(functions.contacts.BlockRequest(event.query.user_id))
+            if H4:
+                await H4(functions.contacts.BlockRequest(event.query.user_id))
+            if H5:
+                await H5(functions.contacts.BlockRequest(event.query.user_id))
+            target = await event.client(GetFullUserRequest(event.query.user_id))
+            first_name = html.escape(target.user.first_name)
+            if first_name is not None:
+                first_name = first_name.replace("\u2060", "")
+            await tbot.send_message(
+                LOG_GP,
+                f"#BLOCK \n\n**Blocked** [{first_name}](tg://user?id={event.query.user_id}) \nReason:- PM Self Block",
+            )
+
     @tgbot.on(callbackquery.CallbackQuery(data=compile(b"reopen")))
     async def reopn(event):
         cids = await client_id(event, event.query.user_id)
@@ -535,6 +542,3 @@ async def on_block_user(event):
                 cache_time=0,
                 alert=True,
             )
-
-
-
